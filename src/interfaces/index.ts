@@ -7,9 +7,9 @@ export interface IConversation {
   id: number,
   created: string,
   updated: string,
+  name: string,
   _embedded: {
     lastMessage: IMessage,
-    recipient: IUser,
     owner: IUser
   }
 }
