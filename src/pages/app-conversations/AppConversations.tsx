@@ -8,7 +8,7 @@ import AppModal from '../../components/app-modal/AppModal'
 import AppConversationForm from './../../components/app-conversation-form/AppConversationForm'
 
 // Interfaces
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps } from '@react-navigation/native'
 import { IConversation } from '../../interfaces'
 
 
@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
   },
   btn: {
     fontSize: 18
+  },
+  emptyState: {
+    marginVertical: 10,
+    textAlign: 'center',
+    fontSize: 16
   }
 })
 
@@ -45,6 +50,7 @@ const demoEntity = {
   id: 1,
   created: '2020',
   updated: '2021',
+  name: 'Pesho',
   _embedded: {
     lastMessage: {
       id: 1,
@@ -57,7 +63,6 @@ const demoEntity = {
         owner: { id: 2, name: 'Pesho' }
       }
     },
-    recipient: { id: 1, name: 'Alex' },
     owner: { id: 2, name: 'Pesho' }
   }
 }
@@ -100,6 +105,8 @@ export default function AppConversations ({ navigation }: CompositeScreenProps<a
             </Pressable>
           )
         })}
+
+        {conversations.length <= 0 && <Text style={styles.emptyState}>No conversations!</Text>}
       </View>
 
       <AppModal isOpen={isOpen}>
