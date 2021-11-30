@@ -5,6 +5,7 @@ import { StyleSheet, View, Text } from 'react-native'
 // Interfaces
 import { IAppMessageProps } from './interfaces'
 
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',

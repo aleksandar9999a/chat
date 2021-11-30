@@ -1,9 +1,12 @@
+// React
 import React, { useState } from 'react'
 import { StyleSheet, View, Pressable, Text, ScrollView, TextInput } from 'react-native'
 
 // Interfaces
 import { CompositeScreenProps } from '@react-navigation/native'
 import { IMessage } from '../../interfaces'
+
+// Components
 import AppMessage from '../../components/app-message/AppMessage'
 
 
