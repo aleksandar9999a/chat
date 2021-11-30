@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, Pressable } from 'react-native'
 
 // Components
 import AppConversationEntity from './../../components/app-conversation-entity/AppConversationEntity'
+import AppModal from '../../components/app-modal/AppModal'
+import AppConversationForm from './../../components/app-conversation-form/AppConversationForm'
 
 // Interfaces
 import { IConversation } from '../../interfaces'
@@ -61,8 +63,11 @@ const demoEntity = {
 
 export default function AppConversations () {
   const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  function handleAdd () {}
+  function toggleModal () {
+    setIsOpen(!isOpen)
+  }
 
   function handlePress (conversation: IConversation) {}
 
@@ -78,7 +83,7 @@ export default function AppConversations () {
         </View>
 
         <View style={styles.headerActions}>
-          <Pressable onPress={handleAdd}>
+          <Pressable onPress={toggleModal}>
             <Text style={styles.btn}>+</Text>
           </Pressable>
         </View>
@@ -93,6 +98,10 @@ export default function AppConversations () {
           )
         })}
       </View>
+
+      <AppModal isOpen={isOpen}>
+        <AppConversationForm onClose={toggleModal} />
+      </AppModal>
     </View>
   )
 }
