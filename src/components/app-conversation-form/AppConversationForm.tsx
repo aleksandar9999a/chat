@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: 'gray',
-    borderWidth: 1
+    borderWidth: 1,
+    padding: 6
   },
   btn: {
     fontSize: 14,
@@ -79,7 +80,7 @@ export default function AppConversationForm ({ onClose }: IAppConversationForm) 
       </View>
 
       <View style={styles.body}>
-        <TextInput style={styles.input} value={text} onChangeText={handleChange} />
+        <TextInput style={styles.input} placeholder="Type here..." value={text} onChangeText={handleChange} />
       </View>
 
       <View style={styles.footer}>
