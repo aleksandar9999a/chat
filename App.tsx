@@ -1,25 +1,25 @@
 // React
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
 
 // React Routes
-import { NativeRouter, Routes, Route } from 'react-router-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 // Components
 import AppConversations from './src/pages/app-conversations/AppConversations'
 import AppConversation from './src/pages/app-convertation/AppConversation'
 
 
+const Stack = createNativeStackNavigator()
+
 export default function App () {
   return (
-    <NativeRouter>
-      <View>
-        <Routes>
-          <Route path="/" element={<AppConversations />} />
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={AppConversations} />
 
-          <Route path="/convertation/:id" element={<AppConversation />} />
-        </Routes>
-      </View>
-    </NativeRouter>
+        <Stack.Screen name="Conversation" component={AppConversation} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
