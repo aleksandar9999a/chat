@@ -1,13 +1,98 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+// React
+import React, { useState } from 'react'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
+
+// Components
+import AppConversationEntity from './../../components/app-conversation-entity/AppConversationEntity'
+
+// Interfaces
+import { IConversation } from '../../interfaces'
+
 
 const styles = StyleSheet.create({
-  container: {}
+  header: {
+    textAlign: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#708090',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  headerContent: {
+    width: '80%'
+  },
+  headerActions: {
+    width: '10%'
+  },
+  headerText: {
+    fontSize: 18
+  },
+  entity: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#708090'
+  },
+  btn: {
+    fontSize: 18
+  }
 })
 
+const demoEntity = {
+  id: 1,
+  created: '2020',
+  updated: '2021',
+  _embedded: {
+    lastMessage: {
+      id: 1,
+      text: 'Test',
+      created: '2020',
+      updated: '2020',
+      _embedded: {
+        conversation: {} as IConversation,
+        recipient: { id: 1, name: 'Alex' },
+        owner: { id: 2, name: 'Pesho' }
+      }
+    },
+    recipient: { id: 1, name: 'Alex' },
+    owner: { id: 2, name: 'Pesho' }
+  }
+}
+
 export default function AppConversations () {
+  const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
+
+  function handleAdd () {}
+
+  function handlePress (conversation: IConversation) {}
+
   return (
-    <View style={styles.container}>
+    <View>
+      <View style={styles.header}>
+        <View style={styles.headerActions}/>
+
+        <View style={styles.headerContent}>
+          <Text style={styles.headerText}>
+            {conversations.length} Conversations
+          </Text>
+        </View>
+
+        <View style={styles.headerActions}>
+          <Pressable onPress={handleAdd}>
+            <Text style={styles.btn}>+</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      <View>
+        {conversations.map(x => {
+          return (
+            <Pressable key={x.id} style={styles.entity} onPress={() => handlePress(x)}>
+              <AppConversationEntity conversation={x} />
+            </Pressable>
+          )
+        })}
+      </View>
     </View>
   )
 }
