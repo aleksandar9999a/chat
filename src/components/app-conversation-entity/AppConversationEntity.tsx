@@ -5,6 +5,7 @@ import { StyleSheet, View, Text } from 'react-native'
 // Interfaces
 import { IAppConversationEntityProps } from './interfaces'
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -36,7 +37,7 @@ export default function AppConversationEntity ({ conversation }: IAppConversatio
     <View style={styles.container}>
       <View style={styles.start}>
         <Text style={styles.title}>
-          {conversation._embedded.recipient.name}
+          {conversation.name}
         </Text>
 
         <Text style={styles.description}>
