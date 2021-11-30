@@ -10,15 +10,10 @@ import AppConversations from './src/pages/app-conversations/AppConversations'
 import AppConversation from './src/pages/app-convertation/AppConversation'
 
 
-const styles = StyleSheet.create({
-  container: {},
-  nav: {}
-})
-
 export default function App () {
   return (
     <NativeRouter>
-      <View style={styles.container}>
+      <View>
         <Routes>
           <Route path="/" element={<AppConversations />} />
 
