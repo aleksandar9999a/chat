@@ -8,6 +8,7 @@ import AppModal from '../../components/app-modal/AppModal'
 import AppConversationForm from './../../components/app-conversation-form/AppConversationForm'
 
 // Interfaces
+import { CompositeScreenProps } from '@react-navigation/native';
 import { IConversation } from '../../interfaces'
 
 
@@ -61,7 +62,7 @@ const demoEntity = {
   }
 }
 
-export default function AppConversations () {
+export default function AppConversations ({ navigation }: CompositeScreenProps<any, any>) {
   const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -69,7 +70,9 @@ export default function AppConversations () {
     setIsOpen(!isOpen)
   }
 
-  function handlePress (conversation: IConversation) {}
+  function handlePress (conversation: IConversation) {
+    navigation.navigate('Conversation', { conversation })
+  }
 
   return (
     <View>
