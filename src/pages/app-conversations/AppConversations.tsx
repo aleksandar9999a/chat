@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 
 
 export default function AppConversations ({ navigation, socket }: IAppConversationsProps) {
-  // const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const conversations = useSelector(conversationsSelector)
 
