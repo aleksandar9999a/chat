@@ -1,5 +1,7 @@
 // React
 import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 // Interfaces
@@ -24,15 +26,39 @@ const styles = StyleSheet.create({
   end: {
     width: '20%',
     textAlign: 'right',
-    paddingHorizontal: '5px'
+    paddingHorizontal: '5px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
   },
   icon: {
     textAlign: 'right',
     fontSize: 26
+  },
+  badge: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#000',
+    padding: 10,
+    marginRight: 10
   }
 })
 
-export default function AppConversationEntity ({ conversation }: IAppConversationEntityProps) {
+export default function AppConversationEntity ({ conversation, socket }: IAppConversationEntityProps) {
+  const [unreaded, setUnreaded] = useState<number>(0)
+
+  useEffect(() => {
+    const sub = socket.onMessage((data) => {
+      if (data.conversation === conversation.name) {
+        setUnreaded(unreaded + 1)
+      }
+    })
+
+    return () => {
+      sub.unsubscribe()
+    }
+  }, [socket])
+
   return (
     <View style={styles.container}>
       <View style={styles.start}>
@@ -46,6 +72,11 @@ export default function AppConversationEntity ({ conversation }: IAppConversatio
       </View>
 
       <View style={styles.end}>
+        {unreaded > 0 && (
+          <View style={styles.badge}>
+            <Text>{unreaded}</Text>
+          </View>
+        )}
         <Text style={styles.icon}>{'>'}</Text>
       </View>
     </View>

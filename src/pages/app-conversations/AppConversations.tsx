@@ -67,7 +67,7 @@ const demoEntity = {
   }
 }
 
-export default function AppConversations ({ navigation }: CompositeScreenProps<any, any>) {
+export default function AppConversations ({ navigation, socket }: any) {
   const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -105,7 +105,7 @@ export default function AppConversations ({ navigation }: CompositeScreenProps<a
         {conversations.map(x => {
           return (
             <Pressable key={x.id} style={styles.entity} onPress={() => handlePress(x)}>
-              <AppConversationEntity conversation={x} />
+              <AppConversationEntity conversation={x} socket={socket} />
             </Pressable>
           )
         })}

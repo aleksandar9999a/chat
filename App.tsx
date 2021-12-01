@@ -45,7 +45,7 @@ export default function App () {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home">
-            {(props) => <AppConversations {...props} />}
+            {(props) => <AppConversations {...props} socket={socket} />}
           </Stack.Screen>
 
           <Stack.Screen name="Conversation">
