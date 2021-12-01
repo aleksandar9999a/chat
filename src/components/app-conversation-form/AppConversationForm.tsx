@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function AppConversationForm ({ onClose }: IAppConversationForm) {
+export default function AppConversationForm ({ onClose, onSubmit }: IAppConversationForm) {
   const [text, setText] = useState<string>('')
 
   function handleChange (text: string) {
@@ -63,7 +63,9 @@ export default function AppConversationForm ({ onClose }: IAppConversationForm) 
     typeof onClose === 'function' && onClose()
   }
 
-  function handleSave () {}
+  function handleSave () {
+    typeof onSubmit === 'function' && onSubmit(text)
+  }
 
   return (
     <View style={styles.container}>

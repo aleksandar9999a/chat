@@ -18,10 +18,29 @@ export interface IMessage {
   id: number,
   text: string,
   created: string,
-  updated: string,
   _embedded: {
     conversation: IConversation,
     recipient: IUser,
     owner: IUser
   }
+}
+
+export interface IReceivedMessage {
+  text: string,
+  recipient: string,
+  conversation: string,
+  owner: string,
+  created: string
+}
+
+export interface ISendMessage {
+  text: string,
+  recipient: string,
+  conversation: string
+}
+
+export interface ITyping {
+  isTyping: boolean,
+  recipient: string,
+  conversation: string
 }

@@ -8,20 +8,22 @@ import { v4 as uuidv4 } from 'uuid'
 import { CHAT_MESSAGE, TYPING } from '../configs/events'
 
 // Interfaces
-import { IConfig, ISub, IMessage } from './inferfaces'
+import { IReceivedMessage, ISendMessage, ITyping } from '../interfaces'
+import { IConfig, ISub } from './inferfaces'
 
 
 export function connect (config: IConfig) {
   const socket = io(config.socket)
+
   let messageSubs: ISub[] = []
   let typingSubs: ISub[] = []
 
-  socket.on(CHAT_MESSAGE, ([text, owner]) => {
-    messageSubs.forEach(({ fn }) => fn({ text, owner }))
+  socket.on(CHAT_MESSAGE, ([text, recipient, owner, conversation, created]) => {
+    messageSubs.forEach(({ fn }) => fn({ text, recipient, owner, conversation, created }))
   })
 
-  socket.on(TYPING, ([isTyping, owner]) => {
-    typingSubs.forEach(({ fn }) => fn({ isTyping, owner }))
+  socket.on(TYPING, ([isTyping, recipient, conversation]) => {
+    typingSubs.forEach(({ fn }) => fn({ isTyping, recipient, conversation }))
   })
 
   function createSub (fn: (data: any) => any, data: ISub[]) {
@@ -37,12 +39,12 @@ export function connect (config: IConfig) {
   }
   
   return {
-    onMessage (fn: (msg: IMessage) => any) {
+    onMessage (fn: (msg: IReceivedMessage) => any) {
       const sub = createSub(fn, messageSubs)
       messageSubs.push(sub)
       return sub
     },
-    onTyping (fn: (msg: IMessage) => any) {
+    onTyping (fn: (msg: ITyping) => any) {
       const sub = createSub(fn, typingSubs)
       typingSubs.push(sub)
       return sub
@@ -53,8 +55,8 @@ export function connect (config: IConfig) {
     stopTyping (user: string) {
       socket.emit(TYPING, [false, user])
     },
-    sendMessage (message: string, recipient: string) {
-      socket.emit(CHAT_MESSAGE, [message, recipient])
+    sendMessage ({ text, recipient, conversation }: ISendMessage) {
+      socket.emit(CHAT_MESSAGE, [text, recipient, config.owner, conversation])
     }
   }
 }

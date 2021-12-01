@@ -1,3 +1,4 @@
 export interface IAppConversationForm {
-  onClose?: () => void
+  onClose?: () => void,
+  onSubmit?: (text: string) => void
 }

@@ -1,11 +1,7 @@
 export interface IConfig {
   socket: string,
-  [key: string]: any
-}
-
-export interface IMessage {
   owner: string,
-  text: string
+  [key: string]: any
 }
 
 export interface ISub {

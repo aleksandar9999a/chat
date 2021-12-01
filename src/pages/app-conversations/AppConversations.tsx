@@ -79,6 +79,10 @@ export default function AppConversations ({ navigation }: CompositeScreenProps<a
     navigation.navigate('Conversation', { conversation })
   }
 
+  function handleSubmit (name: string) {
+    navigation.navigate('Conversation', { conversation: { name } })
+  }
+
   return (
     <View>
       <View style={styles.header}>
@@ -110,7 +114,7 @@ export default function AppConversations ({ navigation }: CompositeScreenProps<a
       </View>
 
       <AppModal isOpen={isOpen}>
-        <AppConversationForm onClose={toggleModal} />
+        <AppConversationForm onClose={toggleModal} onSubmit={handleSubmit} />
       </AppModal>
     </View>
   )

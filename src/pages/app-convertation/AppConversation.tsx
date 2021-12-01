@@ -4,10 +4,16 @@ import { StyleSheet, View, Pressable, Text, ScrollView, TextInput } from 'react-
 
 // Interfaces
 import { CompositeScreenProps } from '@react-navigation/native'
-import { IMessage } from '../../interfaces'
 
 // Components
 import AppMessage from '../../components/app-message/AppMessage'
+
+// Redux
+import { useSelector } from 'react-redux'
+import { conversationSelector } from '../../store'
+
+// Config
+import configs from '../../configs'
 
 
 const styles = StyleSheet.create({
@@ -75,16 +81,26 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function AppConversation ({ navigation, route }: CompositeScreenProps<any, any>) {
+export default function AppConversation ({ navigation, route, socket }: any) {
   const [text, setText] = useState<string>('')
-  const [messages, setMessages] = useState<IMessage[]>([])
-  const [isTyping, setIsTyping] = useState<boolean>(false)
 
+  const messages = useSelector((state: any) => conversationSelector(state, route.params.conversation.name))
+
+  // Don't use reselect to can be reactive
+  const isTyping = useSelector((state: any) => Object.values(state.conversation.typing[route.params.conversation.name] || {}).includes(true))
+  
   function handleChange (text: string) {
     setText(text)
   }
 
-  function handleSubmit () {}
+  function handleSubmit () {
+    if (!text) {
+      return
+    }
+
+    socket.sendMessage({ text, recipient: route.params.conversation.name, conversation: route.params.conversation.name })
+    setText('')
+  }
 
   function handleBack () {
     navigation.navigate('Home')
@@ -109,17 +125,17 @@ export default function AppConversation ({ navigation, route }: CompositeScreenP
       </View>
 
       <ScrollView style={styles.body}>
-        {messages.map(x => {
+        {messages.map((x, i) => {
           return (
-            <View key={x.id} style={styles.entity}>
-              <AppMessage message={x} />
+            <View key={`${i}:${x.owner}`} style={styles.entity}>
+              <AppMessage message={x} isLeft={x.owner === configs.owner}/>
             </View>
           )
         })}
         
         {isTyping && (
           <View style={styles.entity}>
-            <AppMessage message={{ text: '...' }} isLeft />
+            <AppMessage message={{ text: '...' }} />
           </View>
         )}
 
