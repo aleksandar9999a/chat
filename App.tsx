@@ -9,8 +9,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import AppConversations from './src/pages/app-conversations/AppConversations'
 import AppConversation from './src/pages/app-convertation/AppConversation'
 
+// Config
+import config from './src/configs'
+
+// Socket
+import { connect } from './src/socket'
 
 const Stack = createNativeStackNavigator()
+
+connect(config)
 
 export default function App () {
   return (
