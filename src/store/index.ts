@@ -3,7 +3,7 @@ import { createStore, combineReducers } from 'redux'
 import { createSelector } from 'reselect'
 
 // Interfaces
-import { IReceivedMessage, ITyping } from '../interfaces'
+import { IConversation, IReceivedMessage, ITyping } from '../interfaces'
 import { IStore } from './interfaces'
 
 
@@ -58,6 +58,22 @@ export const conversationSelector = createSelector(
   (state: { conversation: IStore }) => state.conversation.items,
   (_: any, conversation: string) => conversation,
   (items, conversation: string) => items.filter(x => x.conversation === conversation)
+)
+
+export const conversationsSelector = createSelector(
+  (state: { conversation: IStore }) => state.conversation.items,
+  (_: any) => _,
+  (items) => Object.values(items.reduce((acc: { [key: string]: IConversation}, message) => {
+    if (!acc[message.conversation]) {
+      acc[message.conversation] = {
+        name: message.conversation,
+        lastMessage: ''
+      }
+    }
+
+    acc[message.conversation].lastMessage = message.text
+    return acc
+  }, {}))
 )
 
 export default store

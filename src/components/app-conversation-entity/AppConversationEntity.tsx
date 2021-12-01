@@ -1,7 +1,5 @@
 // React
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 // Interfaces
@@ -67,7 +65,7 @@ export default function AppConversationEntity ({ conversation, socket }: IAppCon
         </Text>
 
         <Text style={styles.description}>
-          {conversation._embedded.lastMessage.text}
+          {conversation.lastMessage}
         </Text>
       </View>
 

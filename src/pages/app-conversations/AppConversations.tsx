@@ -11,6 +11,10 @@ import AppConversationForm from './../../components/app-conversation-form/AppCon
 import { CompositeScreenProps } from '@react-navigation/native'
 import { IConversation } from '../../interfaces'
 
+// Redux
+import { useSelector } from 'react-redux'
+import { conversationsSelector } from '../../store'
+
 
 const styles = StyleSheet.create({
   header: {
@@ -46,30 +50,11 @@ const styles = StyleSheet.create({
   }
 })
 
-const demoEntity = {
-  id: 1,
-  created: '2020',
-  updated: '2021',
-  name: 'Pesho',
-  _embedded: {
-    lastMessage: {
-      id: 1,
-      text: 'Test',
-      created: '2020',
-      updated: '2020',
-      _embedded: {
-        conversation: {} as IConversation,
-        recipient: { id: 1, name: 'Alex' },
-        owner: { id: 2, name: 'Pesho' }
-      }
-    },
-    owner: { id: 2, name: 'Pesho' }
-  }
-}
 
 export default function AppConversations ({ navigation, socket }: any) {
-  const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
+  // const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const conversations = useSelector(conversationsSelector)
 
   function toggleModal () {
     setIsOpen(!isOpen)
@@ -102,9 +87,9 @@ export default function AppConversations ({ navigation, socket }: any) {
       </View>
 
       <View>
-        {conversations.map(x => {
+        {conversations.map((x, i) => {
           return (
-            <Pressable key={x.id} style={styles.entity} onPress={() => handlePress(x)}>
+            <Pressable key={`${i}:${x.name}`} style={styles.entity} onPress={() => handlePress(x)}>
               <AppConversationEntity conversation={x} socket={socket} />
             </Pressable>
           )
