@@ -87,8 +87,10 @@ export default function AppConversation ({ navigation, route, socket }: any) {
   const messages = useSelector((state: any) => conversationSelector(state, route.params.conversation.name))
 
   // Don't use reselect to can be reactive
-  const isTyping = useSelector((state: any) => Object.values(state.conversation.typing[route.params.conversation.name] || {}).includes(true))
-  
+  const isTyping = useSelector((state: any) => {
+    return !!Object.entries(state.conversation.typing[route.params.conversation.name] || {}).find(([owner, isTyping]) => isTyping && owner !== configs.owner)
+  })
+
   function handleChange (text: string) {
     setText(text)
   }
@@ -104,6 +106,14 @@ export default function AppConversation ({ navigation, route, socket }: any) {
 
   function handleBack () {
     navigation.navigate('Home')
+  }
+
+  function onFocus () {
+    socket.startTyping()
+  }
+
+  function onFocusOut () {
+    socket.stopTyping()
   }
 
   return (
@@ -144,7 +154,7 @@ export default function AppConversation ({ navigation, route, socket }: any) {
 
       <View style={styles.footer}>
         <View style={styles.footerInputWrapper}>
-          <TextInput style={styles.input} placeholder="Type here..." value={text} onChangeText={handleChange} />
+          <TextInput style={styles.input} placeholder="Type here..." value={text} onChangeText={handleChange} onPressIn={onFocus} onPressOut={onFocusOut} />
         </View>
 
         <View style={styles.footerBtnWrapper}>

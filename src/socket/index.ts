@@ -49,11 +49,11 @@ export function connect (config: IConfig) {
       typingSubs.push(sub)
       return sub
     },
-    startTyping (user: string) {
-      socket.emit(TYPING, [true, user])
+    startTyping () {
+      socket.emit(TYPING, [true, config.owner])
     },
-    stopTyping (user: string) {
-      socket.emit(TYPING, [false, user])
+    stopTyping () {
+      socket.emit(TYPING, [false, config.owner])
     },
     sendMessage ({ text, recipient, conversation }: ISendMessage) {
       socket.emit(CHAT_MESSAGE, [text, recipient, config.owner, conversation])
