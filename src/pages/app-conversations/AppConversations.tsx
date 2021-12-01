@@ -8,7 +8,7 @@ import AppModal from '../../components/app-modal/AppModal'
 import AppConversationForm from './../../components/app-conversation-form/AppConversationForm'
 
 // Interfaces
-import { CompositeScreenProps } from '@react-navigation/native'
+import { IAppConversationsProps } from './interfaces'
 import { IConversation } from '../../interfaces'
 
 // Redux
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 })
 
 
-export default function AppConversations ({ navigation, socket }: any) {
+export default function AppConversations ({ navigation, socket }: IAppConversationsProps) {
   // const [conversations, setConversations] = useState<IConversation[]>([demoEntity])
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const conversations = useSelector(conversationsSelector)

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View, Pressable, Text, ScrollView, TextInput } from 'react-native'
 
 // Interfaces
-import { CompositeScreenProps } from '@react-navigation/native'
+import { IAppConversationProps } from './interfaces'
 
 // Components
 import AppMessage from '../../components/app-message/AppMessage'
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function AppConversation ({ navigation, route, socket }: any) {
+export default function AppConversation ({ navigation, route, socket }: IAppConversationProps) {
   const [text, setText] = useState<string>('')
 
   const messages = useSelector((state: any) => conversationSelector(state, route.params.conversation.name))
