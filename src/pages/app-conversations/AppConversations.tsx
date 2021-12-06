@@ -64,6 +64,7 @@ export default function AppConversations ({ navigation, socket }: IAppConversati
   }
 
   function handleSubmit (name: string) {
+    setIsOpen(false)
     navigation.navigate('Conversation', { conversation: { name } })
   }
 
