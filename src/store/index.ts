@@ -12,9 +12,11 @@ const initialState: IStore = {
   typing: {}
 }
 
-function reducer (state = initialState, action: { type: string, payload: IReceivedMessage|ITyping }) {
+function reducer (state = initialState, action: { type: string, payload: IReceivedMessage[]|IReceivedMessage|ITyping }) {
   const actions: { [key: string]: () => typeof state } = {
     type () {
+      action.payload = action.payload as ITyping
+
       const update = {
         ...state
       }
@@ -23,9 +25,15 @@ function reducer (state = initialState, action: { type: string, payload: IReceiv
         update.typing[action.payload.conversation] = {}
       }
 
-      update.typing[action.payload.conversation][action.payload.recipient] = (action.payload as ITyping).isTyping
+      update.typing[action.payload.conversation][action.payload.recipient] = action.payload.isTyping
 
       return update
+    },
+    set () {
+      return {
+        ...state,
+        items: action.payload as IReceivedMessage[]
+      }
     },
     add () {
       return {
@@ -44,6 +52,10 @@ function reducer (state = initialState, action: { type: string, payload: IReceiv
 
 export function addMessage (payload: IReceivedMessage) {
   return { type: 'add', payload }
+}
+
+export function initMessages (payload: IReceivedMessage[]) {
+  return { type: 'set', payload }
 }
 
 export function type (payload: ITyping) {

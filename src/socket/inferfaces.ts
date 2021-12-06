@@ -2,7 +2,6 @@ import { IReceivedMessage, ISendMessage, ITyping } from '../interfaces'
 
 export interface IConfig {
   socket: string,
-  owner: string,
   [key: string]: any
 }
 
@@ -13,6 +12,11 @@ export interface ISub {
 }
 
 export interface ISocket {
+  configuration: {
+    socket: string,
+    owner: string
+  }
+  setUser: (user: string) => void,
   onMessage: (fn: (msg: IReceivedMessage) => any) => ISub,
   onTyping: (fn: (msg: ITyping) => any) => ISub,
   startTyping: () => void,

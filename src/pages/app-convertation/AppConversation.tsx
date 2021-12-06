@@ -12,9 +12,6 @@ import AppMessage from '../../components/app-message/AppMessage'
 import { useSelector } from 'react-redux'
 import { conversationSelector } from '../../store'
 
-// Config
-import configs from '../../configs'
-
 
 const styles = StyleSheet.create({
   header: {
@@ -88,7 +85,7 @@ export default function AppConversation ({ navigation, route, socket }: IAppConv
 
   // Don't use reselect to can be reactive
   const isTyping = useSelector((state: any) => {
-    return !!Object.entries(state.conversation.typing[route.params.conversation.name] || {}).find(([owner, isTyping]) => isTyping && owner !== configs.owner)
+    return !!Object.entries(state.conversation.typing[route.params.conversation.name] || {}).find(([owner, isTyping]) => isTyping && owner !== socket.configuration.owner)
   })
 
   function handleChange (text: string) {
@@ -138,7 +135,7 @@ export default function AppConversation ({ navigation, route, socket }: IAppConv
         {messages.map((x, i) => {
           return (
             <View key={`${i}:${x.owner}`} style={styles.entity}>
-              <AppMessage message={x} isLeft={x.owner === configs.owner}/>
+              <AppMessage message={x} isLeft={x.owner === socket.configuration.owner}/>
             </View>
           )
         })}

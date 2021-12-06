@@ -9,11 +9,15 @@ import { CHAT_MESSAGE, TYPING } from '../configs/events'
 
 // Interfaces
 import { IReceivedMessage, ISendMessage, ITyping } from '../interfaces'
-import { IConfig, ISub } from './inferfaces'
+import { IConfig, ISocket, ISub } from './inferfaces'
 
 
 export function connect (config: IConfig) {
-  const socket = io(config.socket)
+  const configuration = {
+    ...config
+  }
+
+  const socket = io(configuration.socket)
 
   let messageSubs: ISub[] = []
   let typingSubs: ISub[] = []
@@ -39,6 +43,10 @@ export function connect (config: IConfig) {
   }
   
   return {
+    configuration,
+    setUser (user: string) {
+      configuration.owner = user
+    },
     onMessage (fn: (msg: IReceivedMessage) => any) {
       const sub = createSub(fn, messageSubs)
       messageSubs.push(sub)
@@ -50,13 +58,13 @@ export function connect (config: IConfig) {
       return sub
     },
     startTyping () {
-      socket.emit(TYPING, [true, config.owner])
+      socket.emit(TYPING, [true, configuration.owner])
     },
     stopTyping () {
-      socket.emit(TYPING, [false, config.owner])
+      socket.emit(TYPING, [false, configuration.owner])
     },
     sendMessage ({ text, recipient, conversation }: ISendMessage) {
-      socket.emit(CHAT_MESSAGE, [text, recipient, config.owner, conversation])
+      socket.emit(CHAT_MESSAGE, [text, recipient, configuration.owner, conversation])
     }
-  }
+  } as ISocket
 }

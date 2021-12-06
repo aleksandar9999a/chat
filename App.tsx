@@ -1,5 +1,5 @@
 // React
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // React Routes
 import { NavigationContainer } from '@react-navigation/native'
@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 // Redux
 import { Provider } from 'react-redux'
-import store, { addMessage, type } from './src/store'
+import store, { addMessage, initMessages, type } from './src/store'
 
 // Components
 import AppConversations from './src/pages/app-conversations/AppConversations'
@@ -18,7 +18,9 @@ import config from './src/configs'
 
 // Socket
 import { connect } from './src/socket'
-import { useEffect } from 'react'
+
+// Utils
+import { loadStorageData, setMessages } from './src/utils'
 
 const Stack = createNativeStackNavigator()
 const socket = connect(config)
@@ -26,8 +28,14 @@ const socket = connect(config)
 
 export default function App () {
   useEffect(() => {
+    loadStorageData().then(({ user, messages }) => {
+      socket.setUser(user)
+      store.dispatch(initMessages(messages))
+    })
+
     const messageSub = socket.onMessage((message => {
       store.dispatch(addMessage(message))
+      setMessages(store.getState().conversation.items)
     }))
 
     const typingSub = socket.onTyping((data => {
