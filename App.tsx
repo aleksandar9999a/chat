@@ -1,5 +1,6 @@
 // React
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text } from 'react-native'
 
 // React Routes
 import { NavigationContainer } from '@react-navigation/native'
@@ -25,17 +26,32 @@ import { loadStorageData, setMessages } from './src/utils'
 const Stack = createNativeStackNavigator()
 const socket = connect(config)
 
+const styles = StyleSheet.create({
+  error: {
+    textAlign: 'center',
+    color: '#FF2D00',
+    fontWeight: '700',
+    padding: 10
+  }
+})
 
 export default function App () {
+  const [error, setError] = useState<string>('')
+
   useEffect(() => {
     loadStorageData().then(({ user, messages }) => {
       socket.setUser(user)
       store.dispatch(initMessages(messages))
+    }).catch((err: Error) => {
+      setError(err.message)
     })
 
     const messageSub = socket.onMessage((message => {
       store.dispatch(addMessage(message))
-      setMessages(store.getState().conversation.items)
+
+      setMessages(store.getState().conversation.items).catch((err: Error) => {
+        setError(err.message)
+      })
     }))
 
     const typingSub = socket.onTyping((data => {
@@ -50,6 +66,8 @@ export default function App () {
 
   return (
     <Provider store={store}>
+      {error && <Text style={styles.error}>{error}</Text>}
+
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home">
